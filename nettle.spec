@@ -1,8 +1,8 @@
 %define	name	nettle
-%define	version	2.0
+%define	version	2.1
 %define epoch 1 
-%define nettlemajor 3
-%define hogweedmajor 1
+%define nettlemajor 4
+%define hogweedmajor 2
 %define libnettlename %mklibname nettle %nettlemajor
 %define libhogweedname %mklibname hogweed %hogweedmajor
 %define develname %mklibname -d nettle
@@ -15,7 +15,6 @@ License:	GPL
 Group:		System/Libraries
 URL:		http://www.lysator.liu.se/~nisse/nettle/
 Source:		http://www.lysator.liu.se/~nisse/archive/%name-%{version}.tar.gz
-Patch1:		nettle-2.0-hogweed_link.patch
 Epoch: %epoch
 BuildRoot:	%{_tmppath}/%{name}-%{version}
 BuildRequires:	autoconf
@@ -57,10 +56,8 @@ compile programs using this library.
 
 %prep
 %setup -q
-%patch1 -p0 
 
 %build
-autoconf
 %configure2_5x --enable-shared
 %make
 
@@ -72,6 +69,7 @@ rm -rf $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT
 
 %files
+%defattr(-,root,root)
 %{_bindir}/*
 %{_infodir}/*
 
