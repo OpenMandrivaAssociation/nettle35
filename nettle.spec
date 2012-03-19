@@ -1,32 +1,30 @@
-%define	name	nettle
-%define	version	2.1
-%define epoch 1 
 %define nettlemajor 4
 %define hogweedmajor 2
 %define libnettlename %mklibname nettle %nettlemajor
 %define libhogweedname %mklibname hogweed %hogweedmajor
 %define develname %mklibname -d nettle
 
-Name:		%{name}
+Name:		nettle
 Summary:	Nettle cryptographic library
-Version:	%{version}
-Release:	%mkrel 1
-License:	GPL
+Epoch:		1
+Version:	2.4
+Release:	1
+License:	LGPLv2
 Group:		System/Libraries
 URL:		http://www.lysator.liu.se/~nisse/nettle/
 Source:		http://www.lysator.liu.se/~nisse/archive/%name-%{version}.tar.gz
-Epoch: %epoch
-BuildRoot:	%{_tmppath}/%{name}-%{version}
 BuildRequires:	autoconf
 BuildRequires:	openssl-devel
 BuildRequires:	libgmp-devel
+BuildRequires:	recode
 Requires:       %{libnettlename} = %epoch:%version-%release
 Requires:       %{libhogweedname} = %epoch:%version-%release
 
 %description
-Nettle is a cryptographic library that is designed to fit easily in more or less any context: 
-In crypto toolkits for object-oriented languages (C++, Python, Pike, ...), in applications 
-like LSH or GNUPG, or even in kernel space. 
+Nettle is a cryptographic library that is designed to fit easily in more or
+less any context: 
+In crypto toolkits for object-oriented languages (C++, Python, Pike, ...),
+in applications like LSH or GNUPG, or even in kernel space. 
 
 %package -n %{libnettlename}
 Group:		System/Libraries
@@ -61,31 +59,40 @@ compile programs using this library.
 %configure2_5x --enable-shared
 %make
 
+%check
+%make check
+
 %install
 rm -rf $RPM_BUILD_ROOT
 %makeinstall_std
+recode ISO-8859-1..UTF-8 %buildroot%_infodir/*.info
+recode ISO-8859-1..UTF-8 ChangeLog
+
+%post
+%_install_info nettle.info
+
+%postun
+%_remove_install_info nettle.info
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root)
 %{_bindir}/*
 %{_infodir}/*
 
 %files -n %{libnettlename}
-%defattr(-,root,root)
 %{_libdir}/libnettle.so.%{nettlemajor}*
 
 %files -n %{libhogweedname}
 %{_libdir}/libhogweed.so.%{hogweedmajor}*
 
 %files -n %develname
-%defattr(-,root,root)
 %doc AUTHORS TODO ChangeLog
-%{_libdir}/libnettle.a
-%{_libdir}/libhogweed.a
-%{_libdir}/libnettle.so
-%{_libdir}/libhogweed.so
-%{_includedir}/nettle/
+%_libdir/libnettle.a
+%_libdir/libhogweed.a
+%_libdir/libnettle.so
+%_libdir/libhogweed.so
+%_libdir/pkgconfig/*.pc
+%_includedir/nettle/
 
