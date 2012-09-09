@@ -7,18 +7,18 @@
 Name:		nettle
 Summary:	Nettle cryptographic library
 Epoch:		1
-Version:	2.4
+Version:	2.5
 Release:	1
 License:	LGPLv2
 Group:		System/Libraries
 URL:		http://www.lysator.liu.se/~nisse/nettle/
-Source:		http://www.lysator.liu.se/~nisse/archive/%name-%{version}.tar.gz
+Source0:	http://www.lysator.liu.se/~nisse/archive/%name-%{version}.tar.gz
 BuildRequires:	autoconf
 BuildRequires:	openssl-devel
 BuildRequires:	libgmp-devel
 BuildRequires:	recode
-Requires:       %{libnettlename} = %epoch:%version-%release
-Requires:       %{libhogweedname} = %epoch:%version-%release
+Requires:       %{libnettlename} = %{EVRD}
+Requires:       %{libhogweedname} = %{EVRD}
 
 %description
 Nettle is a cryptographic library that is designed to fit easily in more or
@@ -43,9 +43,9 @@ This is the shared library part of the Hogweed library.
 %package -n %develname
 Group:		Development/C++
 Summary:	Header files for compiling against Nettle library
-Provides:	%name-devel = %epoch:%version-%release
-Requires:	%{libnettlename} = %epoch:%version-%release
-Requires:	%{libhogweedname} = %epoch:%version-%release
+Provides:	%name-devel = %{EVRD}
+Requires:	%{libnettlename} = %{EVRD}
+Requires:	%{libhogweedname} = %{EVRD}
 Obsoletes:	%mklibname -d nettle 0
 
 %description -n %develname
@@ -63,19 +63,13 @@ compile programs using this library.
 %make check
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %makeinstall_std
 recode ISO-8859-1..UTF-8 %buildroot%_infodir/*.info
 recode ISO-8859-1..UTF-8 ChangeLog
 
-%post
-%_install_info nettle.info
-
-%postun
-%_remove_install_info nettle.info
-
-%clean
-rm -rf $RPM_BUILD_ROOT
+# why are not libs stripped by spec-helper?
+strip --strip-unneeded %{buildroot}%{_libdir}/libnettle.so.%{nettlemajor}.*
+strip --strip-unneeded %{buildroot}%{_libdir}/libhogweed.so.%{hogweedmajor}.*
 
 %files
 %{_bindir}/*
