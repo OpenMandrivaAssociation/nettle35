@@ -58,7 +58,6 @@ compile programs using this library.
 
 %build
 %configure2_5x \
-	--disable-static \
 	--enable-shared
 
 %make
@@ -85,6 +84,7 @@ recode ISO-8859-1..UTF-8 ChangeLog
 %doc AUTHORS TODO ChangeLog
 %{_libdir}/libnettle.so
 %{_libdir}/libhogweed.so
+%{_libdir}/*.a
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/nettle/
 
