@@ -2,27 +2,25 @@
 %define _enable_debug_packages %{nil}
 %define debug_package %{nil}
 
-%define nettlemajor 4
+%define major 4
 %define hogweedmajor 2
-%define libnettlename %mklibname nettle %{nettlemajor}
+%define libname %mklibname nettle %{major}
 %define libhogweedname %mklibname hogweed %{hogweedmajor}
-%define develname %mklibname -d nettle
+%define devname %mklibname -d nettle
 
 Name:		nettle
 Summary:	Nettle cryptographic library
 Epoch:		1
-Version:	2.4
-Release:	4
+Version:	2.5
+Release:	1
 License:	LGPLv2
 Group:		System/Libraries
 URL:		http://www.lysator.liu.se/~nisse/nettle/
-Source:		http://www.lysator.liu.se/~nisse/archive/%name-%{version}.tar.gz
-BuildRequires:	autoconf
-BuildRequires:	pkgconfig(openssl)
-BuildRequires:	gmp-devel
+Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
+Source1:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz.sig
 BuildRequires:	recode
-Requires:	%{libnettlename} = %{EVRD}
-Requires:	%{libhogweedname} = %{EVRD}
+BuildRequires:	gmp-devel
+BuildRequires:	pkgconfig(openssl)
 
 %description
 Nettle is a cryptographic library that is designed to fit easily in more or
@@ -30,11 +28,11 @@ less any context:
 In crypto toolkits for object-oriented languages (C++, Python, Pike, ...),
 in applications like LSH or GNUPG, or even in kernel space. 
 
-%package -n %{libnettlename}
+%package -n %{libname}
 Group:		System/Libraries
 Summary:	Nettle shared library
 
-%description -n %{libnettlename}
+%description -n %{libname}
 This is the shared library part of the Nettle library.
 
 %package -n %{libhogweedname}
@@ -44,14 +42,14 @@ Summary:	Hogweed shared library
 %description -n %{libhogweedname}
 This is the shared library part of the Hogweed library.
 
-%package -n %{develname}
+%package -n %{devname}
 Group:		Development/C++
 Summary:	Header files for compiling against Nettle library
 Provides:	%{name}-devel = %{EVRD}
-Requires:	%{libnettlename} = %{EVRD}
+Requires:	%{libname} = %{EVRD}
 Requires:	%{libhogweedname} = %{EVRD}
 
-%description -n %{develname}
+%description -n %{devname}
 This is the development package of nettle. Install it if you want to 
 compile programs using this library.
 
@@ -59,7 +57,10 @@ compile programs using this library.
 %setup -q
 
 %build
-%configure2_5x --enable-shared
+%configure2_5x \
+	--disable-static \
+	--enable-shared
+
 %make
 
 %check
@@ -74,18 +75,16 @@ recode ISO-8859-1..UTF-8 ChangeLog
 %{_bindir}/*
 %{_infodir}/*
 
-%files -n %{libnettlename}
-%{_libdir}/libnettle.so.%{nettlemajor}*
+%files -n %{libname}
+%{_libdir}/libnettle.so.%{major}*
 
 %files -n %{libhogweedname}
 %{_libdir}/libhogweed.so.%{hogweedmajor}*
 
-%files -n %{develname}
+%files -n %{devname}
 %doc AUTHORS TODO ChangeLog
 %{_libdir}/libnettle.so
 %{_libdir}/libhogweed.so
-%{_libdir}/libnettle.a
-%{_libdir}/libhogweed.a
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/nettle/
 
