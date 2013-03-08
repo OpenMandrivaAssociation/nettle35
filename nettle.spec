@@ -71,7 +71,6 @@ recode ISO-8859-1..UTF-8 ChangeLog
 
 %files
 %{_bindir}/*
-%{_infodir}/*
 
 %files -n %{libname}
 %{_libdir}/libnettle.so.%{major}*
