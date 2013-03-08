@@ -11,13 +11,12 @@
 Name:		nettle
 Summary:	Nettle cryptographic library
 Epoch:		1
-Version:	2.5
-Release:	2
+Version:	2.6
+Release:	1
 License:	LGPLv2
 Group:		System/Libraries
 URL:		http://www.lysator.liu.se/~nisse/nettle/
 Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
-Source1:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz.sig
 BuildRequires:	recode
 BuildRequires:	gmp-devel
 BuildRequires:	pkgconfig(openssl)
