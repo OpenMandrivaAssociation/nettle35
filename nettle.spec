@@ -66,7 +66,6 @@ compile programs using this library.
 
 %install
 %makeinstall_std
-recode ISO-8859-1..UTF-8 %{buildroot}%{_infodir}/*.info
 recode ISO-8859-1..UTF-8 ChangeLog
 
 %files
