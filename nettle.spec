@@ -2,10 +2,14 @@
 %define _enable_debug_packages %{nil}
 %define debug_package %{nil}
 
+%bcond_with bootstrap
+
 %define major 4
 %define hogweedmajor 2
 %define libname %mklibname nettle %{major}
+%if %{with bootstrap}
 %define libhogweedname %mklibname hogweed %{hogweedmajor}
+%endif
 %define devname %mklibname -d nettle
 
 Name:		nettle
@@ -19,7 +23,9 @@ URL:		http://www.lysator.liu.se/~nisse/nettle/
 Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
 BuildRequires:	recode
 BuildRequires:	gmp-devel
+%if %{with bootstrap}
 BuildRequires:	pkgconfig(openssl)
+%endif
 Patch0:		nettle-aarch64.patch
 
 %description
@@ -35,12 +41,14 @@ Summary:	Nettle shared library
 %description -n %{libname}
 This is the shared library part of the Nettle library.
 
+%if !%{with bootstrap}
 %package -n %{libhogweedname}
 Group:		System/Libraries
 Summary:	Hogweed shared library
 
 %description -n %{libhogweedname}
 This is the shared library part of the Hogweed library.
+%endif
 
 %package -n %{devname}
 Group:		Development/C++
@@ -76,17 +84,20 @@ recode ISO-8859-1..UTF-8 ChangeLog
 %files -n %{libname}
 %{_libdir}/libnettle.so.%{major}*
 
+%if !%{with bootstrap}
 %files -n %{libhogweedname}
 %{_libdir}/libhogweed.so.%{hogweedmajor}*
+%endif
 
 %files -n %{devname}
 %doc AUTHORS TODO ChangeLog
 %{_libdir}/libnettle.so
+%if !%{with bootstrap}
 %{_libdir}/libhogweed.so
+%endif
 %{_libdir}/*.a
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/nettle/
-
 
 
 %changelog
