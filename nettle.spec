@@ -20,6 +20,7 @@ Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
 BuildRequires:	recode
 BuildRequires:	gmp-devel
 BuildRequires:	pkgconfig(openssl)
+Patch0:		nettle-aarch64.patch
 
 %description
 Nettle is a cryptographic library that is designed to fit easily in more or
@@ -54,6 +55,7 @@ compile programs using this library.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %configure2_5x \
