@@ -7,7 +7,7 @@
 %define major 4
 %define hogweedmajor 2
 %define libname %mklibname nettle %{major}
-%if %{with bootstrap}
+%if !%{with bootstrap}
 %define libhogweedname %mklibname hogweed %{hogweedmajor}
 %endif
 %define devname %mklibname -d nettle
