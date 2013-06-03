@@ -1,3 +1,4 @@
----
-sources:
+removed_sources:
   nettle-2.6.tar.gz: 401f982a0b365e04c8c38c4da42afdd7d2d51d80
+sources:
+  nettle-2.7.tar.gz: e17de3678b987841e88a724b7d2f6856d97ab139
