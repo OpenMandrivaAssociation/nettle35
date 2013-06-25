@@ -23,6 +23,7 @@ URL:		http://www.lysator.liu.se/~nisse/nettle/
 Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
 BuildRequires:	recode
 BuildRequires:	gmp-devel
+BuildRequires:	texinfo
 %if %{with bootstrap}
 BuildRequires:	pkgconfig(openssl)
 %endif
@@ -98,6 +99,7 @@ recode ISO-8859-1..UTF-8 ChangeLog
 %{_libdir}/*.a
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/nettle/
+%{_datadir}/info/%{name}.info.*
 
 
 %changelog
