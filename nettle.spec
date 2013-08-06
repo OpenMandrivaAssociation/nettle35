@@ -7,27 +7,25 @@
 %define major 4
 %define hogweedmajor 2
 %define libname %mklibname nettle %{major}
-%if !%{with bootstrap}
-%define libhogweedname %mklibname hogweed %{hogweedmajor}
-%endif
+%define libhogweed %mklibname hogweed %{hogweedmajor}
 %define devname %mklibname -d nettle
 
-Name:		nettle
 Summary:	Nettle cryptographic library
+Name:		nettle
 Epoch:		1
 Version:	2.7.1
 Release:	1
 License:	LGPLv2
 Group:		System/Libraries
-URL:		http://www.lysator.liu.se/~nisse/nettle/
+Url:		http://www.lysator.liu.se/~nisse/nettle/
 Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
+Patch0:		nettle-aarch64.patch
 BuildRequires:	recode
-BuildRequires:	gmp-devel
 BuildRequires:	texinfo
+BuildRequires:	gmp-devel
 %if %{with bootstrap}
 BuildRequires:	pkgconfig(openssl)
 %endif
-Patch0:		nettle-aarch64.patch
 
 %description
 Nettle is a cryptographic library that is designed to fit easily in more or
@@ -43,11 +41,11 @@ Summary:	Nettle shared library
 This is the shared library part of the Nettle library.
 
 %if !%{with bootstrap}
-%package -n %{libhogweedname}
+%package -n %{libhogweed}
 Group:		System/Libraries
 Summary:	Hogweed shared library
 
-%description -n %{libhogweedname}
+%description -n %{libhogweed}
 This is the shared library part of the Hogweed library.
 %endif
 
@@ -56,7 +54,9 @@ Group:		Development/C++
 Summary:	Header files for compiling against Nettle library
 Provides:	%{name}-devel = %{EVRD}
 Requires:	%{libname} = %{EVRD}
-Requires:	%{libhogweedname} = %{EVRD}
+%if !%{with bootstrap}
+Requires:	%{libhogweed} = %{EVRD}
+%endif
 
 %description -n %{devname}
 This is the development package of nettle. Install it if you want to 
@@ -64,7 +64,7 @@ compile programs using this library.
 
 %prep
 %setup -q
-%patch0 -p1
+%apply_patches
 
 %build
 %configure2_5x \
@@ -86,7 +86,7 @@ recode ISO-8859-1..UTF-8 ChangeLog
 %{_libdir}/libnettle.so.%{major}*
 
 %if !%{with bootstrap}
-%files -n %{libhogweedname}
+%files -n %{libhogweed}
 %{_libdir}/libhogweed.so.%{hogweedmajor}*
 %endif
 
@@ -100,19 +100,4 @@ recode ISO-8859-1..UTF-8 ChangeLog
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/nettle/
 %{_datadir}/info/%{name}.info.*
-
-
-%changelog
-* Mon Mar 19 2012 Bernhard Rosenkraenzer <bero@bero.eu> 1:2.4-1
-+ Revision: 785708
-- Update to 2.4, improve spec file
-
-* Wed Oct 27 2010 Funda Wang <fwang@mandriva.org> 1:2.1-1mdv2011.0
-+ Revision: 589577
-- new version 2.1
-
-* Sat Jul 25 2009 Crispin Boylan <crisb@mandriva.org> 1:2.0-1mdv2010.0
-+ Revision: 399777
-- Initial package for mandriva
-- create nettle
 
