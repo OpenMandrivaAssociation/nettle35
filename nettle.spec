@@ -1,6 +1,6 @@
 # Just a hack because rpmlint rejects build with unstripped libs
-%define _enable_debug_packages %{nil}
-%define debug_package %{nil}
+#% define _enable_debug_packages %{nil}
+#% define debug_package %{nil}
 
 %bcond_with bootstrap
 
@@ -20,6 +20,8 @@ Group:		System/Libraries
 Url:		http://www.lysator.liu.se/~nisse/nettle/
 Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
 Patch0:		nettle-aarch64.patch
+Patch1:		nettle-2.7.1-remove-ecc-testsuite.patch
+Patch2:		nettle-2.7.1-tmpalloc.patch	
 BuildRequires:	recode
 BuildRequires:	texinfo
 BuildRequires:	gmp-devel
@@ -65,9 +67,14 @@ compile programs using this library.
 %prep
 %setup -q
 %apply_patches
+# Disable -ggdb3 which makes debugedit unhappy
+sed s/ggdb3/g/ -i configure
+sed 's/ecc-192.c//g' -i Makefile.in
+sed 's/ecc-224.c//g' -i Makefile.in
 
 %build
 %configure2_5x \
+	--enable-static \
 	--enable-shared
 
 %make
