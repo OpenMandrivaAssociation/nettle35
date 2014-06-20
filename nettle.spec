@@ -15,13 +15,13 @@ Name:		nettle
 Epoch:		1
 Version:	2.7.1
 Release:	6
-License:	LGPLv2
+License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.lysator.liu.se/~nisse/nettle/
 Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
 Patch0:		nettle-aarch64.patch
 Patch1:		nettle-2.7.1-remove-ecc-testsuite.patch
-Patch2:		nettle-2.7.1-tmpalloc.patch	
+Patch2:		nettle-2.7.1-tmpalloc.patch
 BuildRequires:	recode
 BuildRequires:	texinfo
 BuildRequires:	gmp-devel
@@ -33,27 +33,42 @@ BuildRequires:	pkgconfig(openssl)
 Nettle is a cryptographic library that is designed to fit easily in more or
 less any context:
 In crypto toolkits for object-oriented languages (C++, Python, Pike, ...),
-in applications like LSH or GNUPG, or even in kernel space. 
+in applications like LSH or GNUPG, or even in kernel space.
+
+%files
+%{_bindir}/*
+
+#----------------------------------------------------------------------------
 
 %package -n %{libname}
-Group:		System/Libraries
 Summary:	Nettle shared library
+Group:		System/Libraries
 
 %description -n %{libname}
 This is the shared library part of the Nettle library.
 
+%files -n %{libname}
+%{_libdir}/libnettle.so.%{major}*
+
+#----------------------------------------------------------------------------
+
 %if !%{with bootstrap}
 %package -n %{libhogweed}
-Group:		System/Libraries
 Summary:	Hogweed shared library
+Group:		System/Libraries
 
 %description -n %{libhogweed}
 This is the shared library part of the Hogweed library.
+
+%files -n %{libhogweed}
+%{_libdir}/libhogweed.so.%{hogweedmajor}*
 %endif
 
+#----------------------------------------------------------------------------
+
 %package -n %{devname}
-Group:		Development/C++
 Summary:	Header files for compiling against Nettle library
+Group:		Development/C++
 Provides:	%{name}-devel = %{EVRD}
 Requires:	%{libname} = %{EVRD}
 %if !%{with bootstrap}
@@ -63,6 +78,19 @@ Requires:	%{libhogweed} = %{EVRD}
 %description -n %{devname}
 This is the development package of nettle. Install it if you want to 
 compile programs using this library.
+
+%files -n %{devname}
+%doc AUTHORS TODO ChangeLog
+%{_libdir}/libnettle.so
+%if !%{with bootstrap}
+%{_libdir}/libhogweed.so
+%endif
+%{_libdir}/*.a
+%{_libdir}/pkgconfig/*.pc
+%{_includedir}/nettle/
+%{_datadir}/info/%{name}.info.*
+
+#----------------------------------------------------------------------------
 
 %prep
 %setup -q
@@ -85,26 +113,4 @@ sed 's/ecc-224.c//g' -i Makefile.in
 %install
 %makeinstall_std
 recode ISO-8859-1..UTF-8 ChangeLog
-
-%files
-%{_bindir}/*
-
-%files -n %{libname}
-%{_libdir}/libnettle.so.%{major}*
-
-%if !%{with bootstrap}
-%files -n %{libhogweed}
-%{_libdir}/libhogweed.so.%{hogweedmajor}*
-%endif
-
-%files -n %{devname}
-%doc AUTHORS TODO ChangeLog
-%{_libdir}/libnettle.so
-%if !%{with bootstrap}
-%{_libdir}/libhogweed.so
-%endif
-%{_libdir}/*.a
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/nettle/
-%{_datadir}/info/%{name}.info.*
 
