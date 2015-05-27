@@ -4,8 +4,8 @@
 
 %bcond_with bootstrap
 
-%define major 4
-%define hogweedmajor 2
+%define major 6
+%define hogweedmajor 4
 %define libname %mklibname nettle %{major}
 %define libhogweed %mklibname hogweed %{hogweedmajor}
 %define devname %mklibname -d nettle
@@ -13,15 +13,14 @@
 Summary:	Nettle cryptographic library
 Name:		nettle
 Epoch:		1
-Version:	2.7.1
-Release:	8
+Version:	3.1.1
+Release:	1
 License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.lysator.liu.se/~nisse/nettle/
 Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
-Patch0:		nettle-aarch64.patch
-Patch1:		nettle-2.7.1-remove-ecc-testsuite.patch
-Patch2:		nettle-2.7.1-tmpalloc.patch
+#Patch1:		nettle-2.7.1-remove-ecc-testsuite.patch
+#Patch2:		nettle-2.7.1-tmpalloc.patch
 BuildRequires:	recode
 BuildRequires:	texinfo
 BuildRequires:	gmp-devel
@@ -97,11 +96,11 @@ compile programs using this library.
 %apply_patches
 # Disable -ggdb3 which makes debugedit unhappy
 sed s/ggdb3/g/ -i configure
-sed 's/ecc-192.c//g' -i Makefile.in
-sed 's/ecc-224.c//g' -i Makefile.in
+#sed 's/ecc-192.c//g' -i Makefile.in
+#sed 's/ecc-224.c//g' -i Makefile.in
 
 %build
-%configure2_5x \
+%configure \
 	--enable-static \
 	--enable-shared
 
