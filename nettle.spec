@@ -19,8 +19,7 @@ License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.lysator.liu.se/~nisse/nettle/
 Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
-#Patch1:		nettle-2.7.1-remove-ecc-testsuite.patch
-#Patch2:		nettle-2.7.1-tmpalloc.patch
+Patch0:		arm_v6_sha256-compress.patch
 BuildRequires:	recode
 BuildRequires:	texinfo
 BuildRequires:	gmp-devel
@@ -100,8 +99,10 @@ sed s/ggdb3/g/ -i configure
 #sed 's/ecc-224.c//g' -i Makefile.in
 
 %build
+CFLAGS="%optflags -fno-integrated-as"
 %configure \
 	--enable-static \
+	--disable-openssl \
 	--enable-shared
 
 %make
