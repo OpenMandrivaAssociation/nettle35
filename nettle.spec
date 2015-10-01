@@ -1,6 +1,7 @@
 # Just a hack because rpmlint rejects build with unstripped libs
 #% define _enable_debug_packages %{nil}
 #% define debug_package %{nil}
+%define _disable_lto 1
 
 %bcond_with bootstrap
 
@@ -21,7 +22,6 @@ Url:		http://www.lysator.liu.se/~nisse/nettle/
 Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
 Patch0:		arm_v6_sha256-compress.patch
 BuildRequires:	recode
-BuildRequires:	texinfo
 BuildRequires:	gmp-devel
 %if %{with bootstrap}
 BuildRequires:	pkgconfig(openssl)
@@ -86,7 +86,6 @@ compile programs using this library.
 %{_libdir}/*.a
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/nettle/
-%{_datadir}/info/%{name}.info.*
 
 #----------------------------------------------------------------------------
 
@@ -99,6 +98,9 @@ sed s/ggdb3/g/ -i configure
 #sed 's/ecc-224.c//g' -i Makefile.in
 
 %build
+mkdir -p bfd
+ln -s %{_bindir}/ld.bfd bfd/ld
+export PATH=$PWD/bfd:$PATH
 CFLAGS="%optflags -fno-integrated-as"
 %configure \
 	--enable-static \
