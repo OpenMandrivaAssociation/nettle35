@@ -20,7 +20,6 @@ License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.lysator.liu.se/~nisse/nettle/
 Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
-Patch0:		arm_v6_sha256-compress.patch
 BuildRequires:	recode
 BuildRequires:	gmp-devel
 %if %{with bootstrap}
