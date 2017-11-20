@@ -14,7 +14,7 @@
 Summary:	Nettle cryptographic library
 Name:		nettle
 Epoch:		1
-Version:	3.3
+Version:	3.4
 Release:	1
 License:	LGPLv2+
 Group:		System/Libraries
@@ -85,6 +85,7 @@ compile programs using this library.
 %{_libdir}/*.a
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/nettle/
+%{_infodir}/nettle.*
 
 #----------------------------------------------------------------------------
 
