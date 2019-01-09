@@ -3,7 +3,7 @@
 #% define debug_package %{nil}
 %define _disable_lto 1
 
-%global optflags %{optflags} -Ofast
+%global optflags %{optflags} -O3
 
 %bcond_with bootstrap
 
@@ -17,7 +17,7 @@ Summary:	Nettle cryptographic library
 Name:		nettle
 Epoch:		1
 Version:	3.4.1
-Release:	1
+Release:	2
 License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.lysator.liu.se/~nisse/nettle/
@@ -103,7 +103,7 @@ sed s/ggdb3/g/ -i configure
 mkdir -p bfd
 ln -s %{_bindir}/ld.bfd bfd/ld
 export PATH=$PWD/bfd:$PATH
-CFLAGS="%optflags -fno-integrated-as"
+CFLAGS="%{optflags} -fno-integrated-as"
 %configure \
 	--enable-static \
 	--disable-openssl \
