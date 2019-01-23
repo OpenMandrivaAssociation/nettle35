@@ -17,7 +17,7 @@ Summary:	Nettle cryptographic library
 Name:		nettle
 Epoch:		1
 Version:	3.4.1
-Release:	3
+Release:	4
 License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.lysator.liu.se/~nisse/nettle/
@@ -103,12 +103,20 @@ sed s/ggdb3/g/ -i configure
 mkdir -p bfd
 ln -s %{_bindir}/ld.bfd bfd/ld
 export PATH=$PWD/bfd:$PATH
+# enable-x86-aesni without enable-fat likely causes bug 2408
+# Inline asm isn't compatible with clang style asm
 CFLAGS="%{optflags} -fno-integrated-as"
 %configure \
 	--enable-static \
 	--disable-openssl \
+%ifarch %{arm} %{aarch64}
+	--enable-arm-neon \
+%endif
 %ifarch %{x86_64}
 	--enable-x86-aesni \
+%ifnarch znver1
+	--enable-fat \
+%endif
 %endif
 	--enable-shared
 
