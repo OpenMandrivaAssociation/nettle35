@@ -150,6 +150,7 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %configure \
 	--enable-static \
 	--disable-openssl \
+	--disable-x86-sha-ni \
 %ifarch %{arm} %{aarch64}
 	--enable-arm-neon \
 %endif
