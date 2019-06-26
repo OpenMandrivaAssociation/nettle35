@@ -28,6 +28,7 @@ Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
 BuildRequires:	recode
 BuildRequires:	gmp-devel
 BuildRequires:	texinfo
+BuildRequires:	pkgconfig(valgrind)
 %if %{with bootstrap}
 BuildRequires:	pkgconfig(openssl)
 %endif
@@ -133,7 +134,8 @@ LDFLAGS="%{ldflags} -fprofile-instr-generate" \
 %endif
 	--enable-shared
 
-%make check
+%make_build
+make check
 
 unset LD_LIBRARY_PATH
 unset LLVM_PROFILE_FILE
