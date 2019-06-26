@@ -98,6 +98,7 @@ compile programs using this library.
 
 %prep
 %autosetup -p1
+%config_update
 # Disable -ggdb3 which makes debugedit unhappy
 sed s/ggdb3/g/ -i configure
 #sed 's/ecc-192.c//g' -i Makefile.in
@@ -127,7 +128,6 @@ LDFLAGS="%{ldflags} -fprofile-instr-generate" \
 %endif
 %ifarch %{x86_64}
 	--enable-x86-aesni \
-	--enable-x86-sha-ni \
 %ifnarch znver1
 	--enable-fat \
 %endif
@@ -155,7 +155,6 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %endif
 %ifarch %{x86_64}
 	--enable-x86-aesni \
-	--enable-x86-sha-ni \
 %ifnarch znver1
 	--enable-fat \
 %endif
