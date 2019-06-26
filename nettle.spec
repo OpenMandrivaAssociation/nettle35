@@ -7,6 +7,9 @@
 
 %bcond_with bootstrap
 
+# (tpg) enable PGO build
+%bcond_without pgo
+
 %define major 6
 %define hogweedmajor 4
 %define libname %mklibname nettle %{major}
@@ -16,8 +19,8 @@
 Summary:	Nettle cryptographic library
 Name:		nettle
 Epoch:		1
-Version:	3.4.1
-Release:	4
+Version:	3.5
+Release:	1
 License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.lysator.liu.se/~nisse/nettle/
@@ -106,6 +109,15 @@ export PATH=$PWD/bfd:$PATH
 # enable-x86-aesni without enable-fat likely causes bug 2408
 # Inline asm isn't compatible with clang style asm
 CFLAGS="%{optflags} -fno-integrated-as"
+
+%if %{with pgo}
+export LLVM_PROFILE_FILE=%{name}-%p.profile.d
+export LD_LIBRARY_PATH="$(pwd)"
+CFLAGS="%{optflags} -fprofile-instr-generate" \
+CXXFLAGS="%{optflags} -fprofile-instr-generate" \
+FFLAGS="$CFLAGS_PGO" \
+FCFLAGS="$CFLAGS_PGO" \
+LDFLAGS="%{ldflags} -fprofile-instr-generate" \
 %configure \
 	--enable-static \
 	--disable-openssl \
@@ -114,6 +126,34 @@ CFLAGS="%{optflags} -fno-integrated-as"
 %endif
 %ifarch %{x86_64}
 	--enable-x86-aesni \
+	--enable-x86-sha-ni \
+%ifnarch znver1
+	--enable-fat \
+%endif
+%endif
+	--enable-shared
+
+%make check
+
+unset LD_LIBRARY_PATH
+unset LLVM_PROFILE_FILE
+llvm-profdata merge --output=%{name}.profile *.profile.d
+
+make clean
+
+CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+%endif
+%configure \
+	--enable-static \
+	--disable-openssl \
+%ifarch %{arm} %{aarch64}
+	--enable-arm-neon \
+%endif
+%ifarch %{x86_64}
+	--enable-x86-aesni \
+	--enable-x86-sha-ni \
 %ifnarch znver1
 	--enable-fat \
 %endif
