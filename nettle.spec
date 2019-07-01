@@ -10,7 +10,7 @@
 # (tpg) enable PGO build
 %bcond_without pgo
 
-%define major 6
+%define major 7
 %define hogweedmajor 4
 %define libname %mklibname nettle %{major}
 %define libhogweed %mklibname hogweed %{hogweedmajor}
