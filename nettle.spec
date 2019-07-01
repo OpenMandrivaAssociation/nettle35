@@ -11,7 +11,7 @@
 %bcond_without pgo
 
 %define major 7
-%define hogweedmajor 4
+%define hogweedmajor 5
 %define libname %mklibname nettle %{major}
 %define libhogweed %mklibname hogweed %{hogweedmajor}
 %define devname %mklibname -d nettle
