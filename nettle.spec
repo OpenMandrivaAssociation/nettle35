@@ -84,7 +84,7 @@ This is the development package of nettle. Install it if you want to
 compile programs using this library.
 
 %files -n %{devname}
-%doc AUTHORS TODO ChangeLog
+%doc AUTHORS ChangeLog
 %{_libdir}/libnettle.so
 %if !%{with bootstrap}
 %{_libdir}/libhogweed.so
