@@ -5,7 +5,7 @@
 
 %global optflags %{optflags} -O3
 
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 # (tpg) enable PGO build
 %bcond_without pgo
