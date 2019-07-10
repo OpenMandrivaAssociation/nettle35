@@ -28,7 +28,9 @@ Source0:	https://ftp.gnu.org/gnu/nettle/%{name}-%{version}.tar.gz
 BuildRequires:	recode
 BuildRequires:	gmp-devel
 BuildRequires:	texinfo
+%ifnarch riscv64
 BuildRequires:	pkgconfig(valgrind)
+%endif
 %if %{with bootstrap}
 BuildRequires:	pkgconfig(openssl)
 %endif
