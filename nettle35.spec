@@ -14,17 +14,16 @@
 %define hogweedmajor 5
 %define libname %mklibname nettle %{major}
 %define libhogweed %mklibname hogweed %{hogweedmajor}
-%define devname %mklibname -d nettle
 
 Summary:	Nettle cryptographic library
-Name:		nettle
+Name:		nettle35
 Epoch:		1
 Version:	3.5.1
 Release:	2
 License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.lysator.liu.se/~nisse/nettle/
-Source0:	https://ftp.gnu.org/gnu/nettle/%{name}-%{version}.tar.gz
+Source0:	https://ftp.gnu.org/gnu/nettle/nettle-%{version}.tar.gz
 BuildRequires:	recode
 BuildRequires:	gmp-devel
 BuildRequires:	texinfo
@@ -41,8 +40,8 @@ less any context:
 In crypto toolkits for object-oriented languages (C++, Python, Pike, ...),
 in applications like LSH or GNUPG, or even in kernel space.
 
-%files
-%{_bindir}/*
+#files
+#{_bindir}/*
 
 #----------------------------------------------------------------------------
 
@@ -72,34 +71,8 @@ This is the shared library part of the Hogweed library.
 
 #----------------------------------------------------------------------------
 
-%package -n %{devname}
-Summary:	Header files for compiling against Nettle library
-Group:		Development/C++
-Provides:	%{name}-devel = %{EVRD}
-Requires:	%{libname} = %{EVRD}
-%if !%{with bootstrap}
-Requires:	%{libhogweed} = %{EVRD}
-%endif
-
-%description -n %{devname}
-This is the development package of nettle. Install it if you want to 
-compile programs using this library.
-
-%files -n %{devname}
-%doc AUTHORS ChangeLog
-%{_libdir}/libnettle.so
-%if !%{with bootstrap}
-%{_libdir}/libhogweed.so
-%endif
-%{_libdir}/*.a
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/nettle/
-%{_infodir}/nettle.*
-
-#----------------------------------------------------------------------------
-
 %prep
-%autosetup -p1
+%autosetup -p1 -n nettle-%{version}
 %config_update
 # Disable -ggdb3 which makes debugedit unhappy
 sed s/ggdb3/g/ -i configure
@@ -172,3 +145,11 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %install
 %make_install
 recode ISO-8859-1..UTF-8 ChangeLog
+
+rm -rf \
+	%{buildroot}%{_bindir} \
+	%{buildroot}%{_libdir}/*.so \
+	%{buildroot}%{_libdir}/*.a \
+	%{buildroot}%{_libdir}/pkgconfig \
+	%{buildroot}%{_includedir} \
+	%{buildroot}%{_infodir}
