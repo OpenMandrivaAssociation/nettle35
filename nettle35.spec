@@ -19,7 +19,7 @@ Summary:	Nettle cryptographic library
 Name:		nettle35
 Epoch:		1
 Version:	3.5.1
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.lysator.liu.se/~nisse/nettle/
