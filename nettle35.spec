@@ -22,7 +22,7 @@ Version:	3.5.1
 Release:	3
 License:	LGPLv2+
 Group:		System/Libraries
-Url:		http://www.lysator.liu.se/~nisse/nettle/
+Url:		https://www.lysator.liu.se/~nisse/nettle/
 Source0:	https://ftp.gnu.org/gnu/nettle/nettle-%{version}.tar.gz
 BuildRequires:	recode
 BuildRequires:	gmp-devel
